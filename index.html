@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#ff6b35">
+  <meta name="description" content="今晚吃啥？在家做饭还是出去吃，抽签帮你决定！">
+  <title>今晚吃啥？ · 晚餐抽签</title>
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ========== 首页：选择用餐方式 ========== -->
+  <section id="screen-home" class="screen active">
+    <header class="home-header">
+      <button id="btn-settings" class="icon-btn" aria-label="设置">⚙️</button>
+      <div class="logo">🍜</div>
+      <h1>今晚吃<span class="highlight">啥</span>？</h1>
+      <p class="slogan">选择困难症终结者 · 一抽定晚餐</p>
+    </header>
+
+    <main class="mode-cards">
+      <button class="mode-card cook" data-mode="cook">
+        <span class="mode-emoji">🏠</span>
+        <span class="mode-title">在家做</span>
+        <span class="mode-desc">精选家常菜谱<br>食材备菜全都有</span>
+        <span class="mode-arrow">›</span>
+      </button>
+      <button class="mode-card eatout" data-mode="eatout">
+        <span class="mode-emoji">🥢</span>
+        <span class="mode-title">出去吃</span>
+        <span class="mode-desc">定位周边饭店<br>随机帮你选一家</span>
+        <span class="mode-arrow">›</span>
+      </button>
+    </main>
+
+    <footer class="home-footer">
+      <button id="btn-install" class="btn-primary install-btn" hidden>📲 安装到手机桌面</button>
+      <p id="ios-install-tip" class="ios-tip" hidden>📲 安装：点 Safari 底部 <b>分享</b> 按钮 → 选择「<b>添加到主屏幕</b>」</p>
+      <p id="free-draws-info" class="free-draws">今日剩余免费抽签：<b>3</b> 次</p>
+      <button id="btn-history" class="text-btn">🕘 今天抽过的</button>
+    </footer>
+  </section>
+
+  <!-- ========== 抽签页：摇签筒 ========== -->
+  <section id="screen-draw" class="screen">
+    <header class="sub-header">
+      <button class="icon-btn back-btn" data-back>‹</button>
+      <h2 id="draw-title">诚心摇签</h2>
+    </header>
+
+    <div class="shake-stage">
+      <div id="stage-flash" class="stage-flash"></div>
+      <div id="glow-burst" class="glow-burst" hidden>
+        <div class="burst-rays"></div>
+        <div class="burst-core"></div>
+      </div>
+      <div id="drawn-stick" class="drawn-stick" hidden>
+        <span class="sparkle" style="--d:0s;   --x:-34px; --y:36px">✦</span>
+        <span class="sparkle" style="--d:.25s; --x:36px;  --y:64px">✧</span>
+        <span class="sparkle" style="--d:.5s;  --x:-40px; --y:120px">✦</span>
+        <span class="sparkle" style="--d:.75s; --x:42px;  --y:150px">✧</span>
+        <span class="sparkle" style="--d:1s;   --x:0px;   --y:-6px">✦</span>
+        <div class="stick-paper">
+          <span id="stick-no" class="stick-no">第一签</span>
+          <b id="stick-text" class="stick-text">——</b>
+        </div>
+      </div>
+      <div id="shake-tube" class="shake-tube">
+        <svg viewBox="0 0 160 190" width="152" height="181" aria-hidden="true">
+          <defs>
+            <linearGradient id="gWood" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#a06a2c"/>
+              <stop offset=".22" stop-color="#d9a45e"/>
+              <stop offset=".45" stop-color="#f0c98a"/>
+              <stop offset=".72" stop-color="#cf9750"/>
+              <stop offset="1" stop-color="#8f5a22"/>
+            </linearGradient>
+            <linearGradient id="gWoodTop" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#c08c46"/>
+              <stop offset=".3" stop-color="#eec388"/>
+              <stop offset=".6" stop-color="#dda85f"/>
+              <stop offset="1" stop-color="#a5712f"/>
+            </linearGradient>
+            <linearGradient id="gStick" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#c9a261"/>
+              <stop offset=".4" stop-color="#f3e2b6"/>
+              <stop offset="1" stop-color="#bd9150"/>
+            </linearGradient>
+            <linearGradient id="gCap" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#e6543f"/>
+              <stop offset="1" stop-color="#a92c1c"/>
+            </linearGradient>
+            <radialGradient id="gRim" cx=".5" cy=".5" r=".65">
+              <stop offset="0" stop-color="#2e1c09"/>
+              <stop offset=".8" stop-color="#4a2f11"/>
+              <stop offset="1" stop-color="#6b451c"/>
+            </radialGradient>
+          </defs>
+
+          <!-- 地面阴影 -->
+          <ellipse cx="80" cy="182" rx="62" ry="9" fill="rgba(90,50,15,.18)"/>
+
+          <!-- 筒内竹签（露出筒口） -->
+          <g id="svg-sticks">
+            <g transform="rotate(-16 62 92)">
+              <rect x="57" y="14" width="10" height="92" rx="5" fill="url(#gStick)" stroke="#8a6427" stroke-width=".8"/>
+              <rect x="57" y="14" width="10" height="20" rx="5" fill="url(#gCap)"/>
+            </g>
+            <g transform="rotate(-9 78 86)">
+              <rect x="73" y="2" width="10" height="104" rx="5" fill="url(#gStick)" stroke="#8a6427" stroke-width=".8"/>
+              <rect x="73" y="2" width="10" height="20" rx="5" fill="url(#gCap)"/>
+            </g>
+            <g transform="rotate(-3 94 84)">
+              <rect x="89" y="0" width="10" height="106" rx="5" fill="url(#gStick)" stroke="#8a6427" stroke-width=".8"/>
+              <rect x="89" y="0" width="10" height="20" rx="5" fill="url(#gCap)"/>
+            </g>
+            <g transform="rotate(4 104 88)">
+              <rect x="99" y="6" width="10" height="100" rx="5" fill="url(#gStick)" stroke="#8a6427" stroke-width=".8"/>
+              <rect x="99" y="6" width="10" height="20" rx="5" fill="url(#gCap)"/>
+            </g>
+            <g transform="rotate(11 114 92)">
+              <rect x="109" y="18" width="10" height="88" rx="5" fill="url(#gStick)" stroke="#8a6427" stroke-width=".8"/>
+              <rect x="109" y="18" width="10" height="20" rx="5" fill="url(#gCap)"/>
+            </g>
+            <g transform="rotate(-22 52 100)">
+              <rect x="47" y="30" width="9" height="76" rx="4.5" fill="url(#gStick)" stroke="#8a6427" stroke-width=".8"/>
+              <rect x="47" y="30" width="9" height="17" rx="4.5" fill="url(#gCap)"/>
+            </g>
+            <g transform="rotate(19 122 100)">
+              <rect x="117" y="34" width="9" height="72" rx="4.5" fill="url(#gStick)" stroke="#8a6427" stroke-width=".8"/>
+              <rect x="117" y="34" width="9" height="17" rx="4.5" fill="url(#gCap)"/>
+            </g>
+          </g>
+
+          <!-- 筒身 -->
+          <g>
+            <rect x="26" y="72" width="108" height="106" rx="14" fill="url(#gWood)"/>
+            <path d="M30 96 q10 -3 20 0 M96 118 q10 -3 22 0 M34 146 q12 -3 24 0" stroke="rgba(90,50,15,.28)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <rect x="26" y="104" width="108" height="11" fill="rgba(70,40,12,.45)"/>
+            <rect x="26" y="104" width="108" height="3" fill="rgba(255,230,180,.25)"/>
+            <rect x="26" y="148" width="108" height="9" fill="rgba(70,40,12,.4)"/>
+            <ellipse cx="46" cy="98" rx="7" ry="34" fill="rgba(255,240,210,.32)" transform="rotate(-6 46 98)"/>
+            <ellipse cx="116" cy="112" rx="4" ry="26" fill="rgba(80,45,12,.25)" transform="rotate(8 116 112)"/>
+          </g>
+
+          <!-- 筒口（椭圆沿口，盖在签子前面） -->
+          <ellipse cx="80" cy="72" rx="60" ry="17" fill="url(#gRim)" stroke="#7c4d1d" stroke-width="3"/>
+          <ellipse cx="80" cy="72" rx="60" ry="17" fill="none" stroke="rgba(255,225,170,.5)" stroke-width="1.4" stroke-dasharray="30 200" stroke-dashoffset="-8"/>
+          <!-- 筒沿高光 + 「签」字封条 -->
+          <path d="M28 64 q52 -26 104 0" stroke="rgba(255,235,190,.65)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <g transform="rotate(-4 80 116)">
+            <rect x="66" y="96" width="28" height="58" rx="5" fill="#c8321e" opacity=".92"/>
+            <rect x="66" y="96" width="28" height="58" rx="5" fill="none" stroke="#f3d27e" stroke-width="1.6"/>
+            <text x="80" y="136" text-anchor="middle" font-size="24" fill="#ffe9b0" font-family="'Kaiti SC','STKaiti',serif" font-weight="bold" style="writing-mode:tb;glyph-orientation-vertical:0deg">签</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div id="fortune-strip" class="fortune-strip" hidden>
+      <div class="fs-head">
+        <span id="fortune-grade" class="fs-grade">上上签</span>
+        <b id="fortune-line" class="fs-line">——</b>
+      </div>
+      <div class="fs-yiji">
+        <span class="fs-yi">宜 · <i id="fortune-yi"></i></span>
+        <span class="fs-ji">忌 · <i id="fortune-ji"></i></span>
+      </div>
+      <button id="btn-reveal" class="btn-primary">🔮 揭开今晚的答案</button>
+    </div>
+
+    <div id="motion-permission" class="motion-permission" hidden>
+      <button id="btn-motion" class="btn-primary">🙏 点我授权 · 摇手机求签</button>
+      <p>iOS 需授权"动作与方向"传感器（仅本页面使用）</p>
+    </div>
+
+    <div class="energy-wrap">
+      <span class="energy-title">签筒能量</span>
+      <div class="energy-bar"><div id="energy-fill"></div></div>
+      <span id="energy-label">用力摇！</span>
+    </div>
+
+    <p id="draw-hint" class="draw-hint">按住签筒，左右快速摇晃</p>
+    <p class="draw-left-tip">剩余次数：<b id="draw-count">3</b></p>
+  </section>
+
+  <!-- ========== 结果页：在家做 ========== -->
+  <section id="screen-result-cook" class="screen">
+    <header class="sub-header">
+      <button class="icon-btn back-btn" data-back>‹</button>
+      <h2>今晚就吃它</h2>
+    </header>
+
+    <div id="cook-result" class="result-body"><!-- JS 填充 --></div>
+
+    <div class="result-actions">
+      <button id="btn-recook" class="btn-ghost">🎲 不想吃，再抽一次</button>
+      <button id="btn-accept-cook" class="btn-primary">✅ 就吃这个</button>
+    </div>
+  </section>
+
+  <!-- ========== 结果页：出去吃 ========== -->
+  <section id="screen-result-eatout" class="screen">
+    <header class="sub-header">
+      <button class="icon-btn back-btn" data-back>‹</button>
+      <h2>就去这家吃</h2>
+    </header>
+
+    <div id="eatout-result" class="result-body"><!-- JS 填充 --></div>
+
+    <div class="result-actions">
+      <button id="btn-reeat" class="btn-ghost">🎲 不想去，再抽一次</button>
+      <a id="btn-nav" class="btn-primary" href="#" target="_blank" rel="noopener">📍 导航过去</a>
+    </div>
+  </section>
+
+  <!-- ========== 历史记录 ========== -->
+  <section id="screen-history" class="screen">
+    <header class="sub-header">
+      <button class="icon-btn back-btn" data-back>‹</button>
+      <h2>今天抽过的</h2>
+    </header>
+    <div id="history-list" class="history-list"><!-- JS 填充 --></div>
+    <button id="btn-clear-history" class="text-btn danger">清空记录</button>
+  </section>
+
+  <!-- ========== 模拟激励广告弹层 ========== -->
+  <div id="ad-overlay" class="overlay">
+    <div class="ad-topbar"><span class="ad-tag">广告</span><span id="ad-countdown">5</span></div>
+    <div class="ad-body">
+      <div class="ad-creative">
+        <div class="ad-emoji">📺</div>
+        <h3>精品推荐</h3>
+        <p>这里是激励视频广告位<br>（正式版可接入 穿山甲 / AdMob 激励视频）</p>
+        <div class="ad-fakeprogress"><div class="ad-fakeprogress-bar"></div></div>
+      </div>
+    </div>
+    <button id="ad-close" class="ad-close" disabled>✕</button>
+  </div>
+
+  <!-- ========== 设置弹层 ========== -->
+  <div id="settings-overlay" class="overlay settings-overlay">
+    <div class="settings-card">
+      <h3>⚙️ 设置</h3>
+      <label class="settings-field">
+        <span>高德地图 Web服务 Key<br><i>用于真实"周边饭店"搜索，留空则使用演示数据。在高德开放平台(lbs.amap.com)免费申请。</i></span>
+        <input id="input-amap-key" type="text" placeholder="请粘贴 Key，例如 0a1b2c..."/>
+      </label>
+      <label class="settings-field">
+        <span>每日免费抽签次数</span>
+        <input id="input-free-quota" type="number" min="1" max="99" value="3"/>
+      </label>
+      <div class="settings-actions">
+        <button id="btn-settings-cancel" class="btn-ghost">取消</button>
+        <button id="btn-settings-save" class="btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- toast -->
+  <div id="toast" class="toast"></div>
+
+  <script src="js/data-recipes.js"></script>
+  <script src="js/data-restaurants.js"></script>
+  <script src="js/amap.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
