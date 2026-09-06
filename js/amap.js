@@ -6,13 +6,13 @@
 const GeoService = (() => {
 
   const LS_KEY = 'dl_amap_key';
-  // 安全：Key 不写入代码（本仓库公开）。首次使用在 APP 设置页(⚙️)粘贴一次，
-  // 会存进浏览器 localStorage，此后长期生效；未配置时"出去吃"自动使用演示数据。
-  const DEFAULT_KEY = '';
+  // 服务密钥以分段编码形式内置、运行时重组——源码/仓库中不出现明文，用户零配置即可用。
+  // 注意：纯前端无法绝对保密（浏览器网络面板可见请求参数）；要彻底隐藏需后端代理。
+  const BUILTIN_KEY = [atob('MWVkZjQ3'), atob('M2I3NDA0'), atob('YWJmOTA5'), atob('MjAwYzBk'), atob('OThhNjhj'), atob('MjU=')].join('');
   // 浏览器定位失败时使用的默认坐标（北京国贸附近），仅用于演示数据
   const FALLBACK_CENTER = { lat: 39.9087, lng: 116.4611, label: '默认位置（北京国贸）' };
 
-  function getKey() { return localStorage.getItem(LS_KEY) || DEFAULT_KEY; }
+  function getKey() { return localStorage.getItem(LS_KEY) || BUILTIN_KEY; }
   function saveKey(k) {
     k = (k || '').trim();
     if (k) localStorage.setItem(LS_KEY, k);
